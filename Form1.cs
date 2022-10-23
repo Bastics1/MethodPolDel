@@ -42,11 +42,11 @@ namespace WindowsFormsApp1
 
 
             chart1.ChartAreas[0].AxisX.IntervalOffsetType = DateTimeIntervalType.Number;
-            chart1.ChartAreas[0].AxisX.Interval = 11;
+            //chart1.ChartAreas[0].AxisX.Interval = 11;
 
-            
-
-            for (double i = -10;  i < 11; i += 1) {
+            double minX = Convert.ToDouble(textBox5.Text);
+            double maxX = Convert.ToDouble(textBox6.Text);
+            for (double i = minX;  i < maxX + 1; i += 1) {
              
                 var y = (double)formula.Substitute("x", i).EvalNumerical();
                 chart1.Series[0].Points.AddXY(i, y);
