@@ -67,9 +67,10 @@ namespace WindowsFormsApp1
             double c = 0;
             var convA = (double)convFormula.Substitute("x", a).EvalNumerical();
             var convB = (double)convFormula.Substitute("x", b).EvalNumerical();
+            var precision = Convert.ToInt32(textBox7.Text);
             if (convA * convB < 0)
             {
-            while (GetDecimalDigitsCount(c) != 6)
+            while (GetDecimalDigitsCount(c) != precision)
             {
                 chart1.Series[1].Points.Clear();
                 c = (a + b)/2;
