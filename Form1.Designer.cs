@@ -49,7 +49,6 @@
             this.label5 = new System.Windows.Forms.Label();
             this.textBox7 = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
-            this.textBox8 = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -106,18 +105,18 @@
             series3.LabelBorderDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.NotSet;
             series3.LabelForeColor = System.Drawing.Color.Bisque;
             series3.Legend = "Legend1";
-            series3.Name = "Граница А";
+            series3.Name = "Начальная граница";
             series3.YValuesPerPoint = 4;
             series4.ChartArea = "ChartArea1";
             series4.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
             series4.Color = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
             series4.Legend = "Legend1";
-            series4.Name = "Граница B";
+            series4.Name = "Конечная граница";
             this.chart1.Series.Add(series1);
             this.chart1.Series.Add(series2);
             this.chart1.Series.Add(series3);
             this.chart1.Series.Add(series4);
-            this.chart1.Size = new System.Drawing.Size(723, 297);
+            this.chart1.Size = new System.Drawing.Size(769, 310);
             this.chart1.TabIndex = 3;
             this.chart1.Text = "chart1";
             // 
@@ -133,14 +132,14 @@
             // 
             // textBox3
             // 
-            this.textBox3.Location = new System.Drawing.Point(446, 26);
+            this.textBox3.Location = new System.Drawing.Point(369, 70);
             this.textBox3.Name = "textBox3";
             this.textBox3.Size = new System.Drawing.Size(57, 20);
             this.textBox3.TabIndex = 5;
             // 
             // textBox4
             // 
-            this.textBox4.Location = new System.Drawing.Point(605, 26);
+            this.textBox4.Location = new System.Drawing.Point(605, 29);
             this.textBox4.Name = "textBox4";
             this.textBox4.Size = new System.Drawing.Size(89, 20);
             this.textBox4.TabIndex = 6;
@@ -150,18 +149,18 @@
             this.label2.AutoSize = true;
             this.label2.Location = new System.Drawing.Point(366, 9);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(59, 13);
+            this.label2.Size = new System.Drawing.Size(106, 13);
             this.label2.TabIndex = 7;
-            this.label2.Text = "Граница А";
+            this.label2.Text = "Начальная граница";
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(443, 9);
+            this.label3.Location = new System.Drawing.Point(367, 54);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(59, 13);
+            this.label3.Size = new System.Drawing.Size(99, 13);
             this.label3.TabIndex = 8;
-            this.label3.Text = "Граница B";
+            this.label3.Text = "Конечная граница";
             // 
             // label4
             // 
@@ -197,26 +196,19 @@
             // 
             // textBox7
             // 
-            this.textBox7.Location = new System.Drawing.Point(522, 26);
+            this.textBox7.Location = new System.Drawing.Point(509, 29);
             this.textBox7.Name = "textBox7";
-            this.textBox7.Size = new System.Drawing.Size(51, 20);
+            this.textBox7.Size = new System.Drawing.Size(61, 20);
             this.textBox7.TabIndex = 13;
             // 
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(519, 9);
+            this.label6.Location = new System.Drawing.Point(506, 9);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(54, 13);
+            this.label6.Size = new System.Drawing.Size(64, 13);
             this.label6.TabIndex = 14;
-            this.label6.Text = "Точность";
-            // 
-            // textBox8
-            // 
-            this.textBox8.Location = new System.Drawing.Point(605, 67);
-            this.textBox8.Name = "textBox8";
-            this.textBox8.Size = new System.Drawing.Size(51, 20);
-            this.textBox8.TabIndex = 15;
+            this.label6.Text = "Точность E";
             // 
             // Form1
             // 
@@ -224,7 +216,6 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
             this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Controls.Add(this.textBox8);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.textBox7);
             this.Controls.Add(this.label5);
@@ -265,7 +256,6 @@
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.TextBox textBox7;
         private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.TextBox textBox8;
     }
 }
 
