@@ -23,113 +23,129 @@ namespace WindowsFormsApp1
             InitializeComponent();
             StartPosition = FormStartPosition.CenterScreen;
         }
-
+        //Нельзя вводить буквы в textbox (кроме формулы, туда можно)
+        void TextBox1KeyPress(object sender, KeyPressEventArgs e)
+        {
+            var number = e.KeyChar;
+            //   Число                   Запятая         Backspace      Минус
+            if (!Char.IsDigit(number) && number != 44 && number != 8 && number != 45)
+            {
+                e.Handled = true;
+            }
+        }
+        //Для точности
+        void TextBox2KeyPress(object sender, KeyPressEventArgs e)
+        {
+            var number = e.KeyChar;
+            if (!Char.IsDigit(number) && number != 44 && number != 8)
+            {
+                e.Handled = true;
+            }
+        }
         private void button1_Click(object sender, EventArgs e)
         {
-            //int GetDecimalDigitsCount(double number)
-            //{
-            //    string[] str = number.ToString(new System.Globalization.NumberFormatInfo() { NumberDecimalSeparator = "." }).Split('.');
-            //    return str.Length == 2 ? str[1].Length : 0;
-            //}
-            double lowerLimitX = Convert.ToDouble(textBox5.Text);
-            double upperLimitX = Convert.ToDouble(textBox6.Text);
-            double firstLimit = Convert.ToDouble(textBox2.Text);
-            double secondLimit = Convert.ToDouble(textBox3.Text);
-            if (firstLimit > lowerLimitX 
-                && secondLimit<upperLimitX)
+            try
             {
-                try
+                double lowerLimitX = Convert.ToDouble(textBox5.Text);
+                double upperLimitX = Convert.ToDouble(textBox6.Text);
+                double firstLimit = Convert.ToDouble(textBox2.Text);
+                double secondLimit = Convert.ToDouble(textBox3.Text);
+                if (lowerLimitX < upperLimitX)
                 {
-                    chart1.Series[0].Points.Clear();
-                    chart1.Series[1].Points.Clear();
-                    chart1.Series[2].Points.Clear();
-                    chart1.Series[3].Points.Clear();
-
-                    Entity formula = Convert.ToString(textBox1.Text);
-                    formula = formula.Simplify();
-                    var convFormula = formula.Differentiate("x").Simplify();
-
-                    chart1.Series[0].XValueType = ChartValueType.Double;
-                    chart1.ChartAreas[0].AxisX.IntervalOffsetType = DateTimeIntervalType.Number;
-
-                    double y = 0;
-                    //Строим график
-                    for (double i = lowerLimitX; i < upperLimitX + 1; i += 1)
+                    if (firstLimit >= lowerLimitX && firstLimit <= upperLimitX && secondLimit >= lowerLimitX
+                        && secondLimit <= upperLimitX)
                     {
-                        //основной график
-                        y = (double)formula.Substitute("x", i).EvalNumerical();
-                        chart1.Series[0].Points.AddXY(i, y);
+                        chart1.Series[0].Points.Clear();
+                        chart1.Series[1].Points.Clear();
+                        chart1.Series[2].Points.Clear();
+                        chart1.Series[3].Points.Clear();
+                        //Парсим формулу из textbox
+                        Entity formula = Convert.ToString(textBox1.Text);
+                        formula = formula.Simplify();
+                        
+                        //chart1.Series[0].XValueType = ChartValueType.Double;
+                        //chart1.ChartAreas[0].AxisX.IntervalOffsetType = DateTimeIntervalType.Number;
 
-                        //Начальная граница 
-                        var addx1 = Convert.ToDouble(textBox2.Text);
-                        chart1.Series[2].Points.AddXY(firstLimit, 0);
-                        chart1.Series[2].Points.AddXY(firstLimit, y);
+                        double y = 0;
+                        //Строим график
+                        for (double i = lowerLimitX; i < upperLimitX + 1; i += 1)
+                        {
+                            //основной график
+                            y = (double)formula.Substitute("x", i).EvalNumerical();
+                            chart1.Series[0].Points.AddXY(i, y);
 
-                        //Конечная граница 
-                        var addx2 = Convert.ToDouble(textBox3.Text);
-                        chart1.Series[3].Points.AddXY(addx2, 0);
-                        chart1.Series[3].Points.AddXY(addx2, y);
-                    }
+                            //Начальная граница 
+                            var addx1 = Convert.ToDouble(textBox2.Text);
+                            chart1.Series[2].Points.AddXY(firstLimit, 0);
+                            chart1.Series[2].Points.AddXY(firstLimit, y);
 
-                    double Fc = 0;
-                    double c = 0;
+                            //Конечная граница 
+                            var addx2 = Convert.ToDouble(textBox3.Text);
+                            chart1.Series[3].Points.AddXY(addx2, 0);
+                            chart1.Series[3].Points.AddXY(addx2, y);
+                        }
 
-                    //Функция от границ, для условия сходимости
-                    var convA = (double)formula.Substitute("x", firstLimit).EvalNumerical();
-                    var convB = (double)formula.Substitute("x", secondLimit).EvalNumerical();
+                        double Fx = 0;
+                        double x = 0;
 
-                    //Точность
-                    double precision = Convert.ToDouble(textBox7.Text); 
+                        ////Функция от границ, для условия сходимости
+                        //var convA = (double)formula.Substitute("x", firstLimit).EvalNumerical();
+                        //var convB = (double)formula.Substitute("x", secondLimit).EvalNumerical();
 
-                    if (convA * convB < 0) //Проверка условия сходимости
-                    {
+                        //Точность
+                        double precision = Convert.ToDouble(textBox7.Text);
+                        //Сигма для формул
+                        double sigma = precision / 2 - precision / 4;
                         do
                         {
                             chart1.Series[1].Points.Clear();
-                            c = (firstLimit + secondLimit) / 2;
-                            var Fa = (double)formula.Substitute("x", firstLimit).EvalNumerical();
-                            //var Fb = (double)convFormula.Substitute("x", b).EvalNumerical();
-                            Fc = (double)formula.Substitute("x", c).EvalNumerical();
-                            //var Fcc = (double)formula.Substitute("x", c).EvalNumerical();
-                            if (Fc * Fa < 0)
+                            x = (firstLimit + secondLimit) / 2;
+                            double l = x - sigma;
+                            double r = x + sigma;
+                            double Fl = (double)formula.Substitute("x", l).EvalNumerical();
+                            double Fr = (double)formula.Substitute("x", r).EvalNumerical();
+
+                            Fx = (double)formula.Substitute("x", x).EvalNumerical();
+
+                            if (Fl <= Fr)
                             {
-                                secondLimit = c;
+                                secondLimit = r;
                             }
-                            else
+                            else if (Fl > Fr)
                             {
-                                firstLimit = c;
+                                firstLimit = l;
                             }
-                            chart1.Series[1].Points.AddXY(c, Fc);
-                            textBox4.Text = Convert.ToString(Math.Round(c, 5));
-                        } while (Math.Abs(Fc) >= precision);
+                            chart1.Series[1].Points.AddXY(x, Fx);
+                            textBox4.Text = Convert.ToString(Math.Round(x, 6));
+                        } while (Math.Abs(firstLimit - secondLimit) >= precision);
                     }
                     else
                     {
+                        chart1.Series[0].Points.Clear();
                         chart1.Series[1].Points.Clear();
-                        textBox4.Text = "";
-                        MessageBox.Show("Не выполнено условие на сходимость функций границ", "Условие сходимости");
+                        chart1.Series[2].Points.Clear();
+                        chart1.Series[3].Points.Clear();
+                        MessageBox.Show("Границы поиска выходят за границы X");
                     }
                 }
-                catch (AngouriMathBaseException)
+                else
                 {
-                    MessageBox.Show("Ошибка в формуле или введенных границах X", "Ошибка");
+                    MessageBox.Show("Неверные границы X", "Ошибка");
                 }
-                catch (FormatException)
-                {
-                    MessageBox.Show("Ошибка формата введенных данных", "Ошибка");
-                }
-                catch (Exception)
-                {
-                    MessageBox.Show("Ошибка: {ex.Source}", "Ошибка");
-                }
-            } else
+            }
+            catch (AngouriMathBaseException)
             {
-                chart1.Series[0].Points.Clear();
-                chart1.Series[1].Points.Clear();
-                chart1.Series[2].Points.Clear();
-                chart1.Series[3].Points.Clear();
-                MessageBox.Show("Границы поиска выходят за границы X");
+                MessageBox.Show("Ошибка в формуле или введенных границах X", "Ошибка");
+            }
+            catch (FormatException)
+            {
+                MessageBox.Show("Ошибка формата введенных данных", "Ошибка");
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("Ошибка: {ex.Source}", "Ошибка");
             }
         }
+
     }
 }
